@@ -3,7 +3,7 @@ import pandas as pd
 
 st.set_page_config(page_title="Music will never die", layout="wide")
 
-# -------------------- PASTEL CSS --------------------
+# -------------------- PASTEL UI --------------------
 st.markdown("""
 <style>
 body {
@@ -18,15 +18,7 @@ body {
     margin-bottom: 30px;
 }
 
-.carousel {
-    display: flex;
-    overflow-x: auto;
-    gap: 20px;
-    padding: 20px 0;
-}
-
 .card {
-    min-width: 220px;
     background: #ffe4f0;
     padding: 12px;
     border-radius: 20px;
@@ -50,43 +42,43 @@ body {
 
 st.markdown("<div class='title'>🎵 Music will never die</div>", unsafe_allow_html=True)
 
-# -------------------- SONG DATA --------------------
+# -------------------- เพลงไทย --------------------
 
 songs = {
     "อินเลิฟ,มีความรัก": [
-        {"title": "Perfect - Ed Sheeran",
-         "youtube": "https://www.youtube.com/watch?v=2Vv-BfVoq4g",
-         "cover": "https://i.ytimg.com/vi/2Vv-BfVoq4g/maxresdefault.jpg"},
-        {"title": "Lover - Taylor Swift",
-         "youtube": "https://www.youtube.com/watch?v=-BjZmE2gtdo",
-         "cover": "https://i.ytimg.com/vi/-BjZmE2gtdo/maxresdefault.jpg"},
-        {"title": "All of Me - John Legend",
-         "youtube": "https://www.youtube.com/watch?v=450p7goxZqg",
-         "cover": "https://i.ytimg.com/vi/450p7goxZqg/maxresdefault.jpg"}
+        {"title": "คลั่งรัก - First Anuwat",
+         "youtube": "https://www.youtube.com/watch?v=8sYkCwE0ZcI",
+         "cover": "https://i.ytimg.com/vi/8sYkCwE0ZcI/maxresdefault.jpg"},
+        {"title": "คนโปรด - Billkin",
+         "youtube": "https://www.youtube.com/watch?v=dYIT_1iKp8Y",
+         "cover": "https://i.ytimg.com/vi/dYIT_1iKp8Y/maxresdefault.jpg"},
+        {"title": "แพ้ทาง - LABANOON",
+         "youtube": "https://www.youtube.com/watch?v=VvZ1JxFqZ9Y",
+         "cover": "https://i.ytimg.com/vi/VvZ1JxFqZ9Y/maxresdefault.jpg"}
     ],
     "เหนื่อย,ท้อ": [
-        {"title": "Fix You - Coldplay",
-         "youtube": "https://www.youtube.com/watch?v=k4V3Mo61fJM",
-         "cover": "https://i.ytimg.com/vi/k4V3Mo61fJM/maxresdefault.jpg"},
-        {"title": "Let It Be - The Beatles",
-         "youtube": "https://www.youtube.com/watch?v=QDYfEBY9NM4",
-         "cover": "https://i.ytimg.com/vi/QDYfEBY9NM4/maxresdefault.jpg"}
+        {"title": "กำลังใจ - โฮป",
+         "youtube": "https://www.youtube.com/watch?v=H-4gC4JbGzY",
+         "cover": "https://i.ytimg.com/vi/H-4gC4JbGzY/maxresdefault.jpg"},
+        {"title": "ชีวิตยังคงสวยงาม - Bodyslam",
+         "youtube": "https://www.youtube.com/watch?v=9Xb6kM1l8Yk",
+         "cover": "https://i.ytimg.com/vi/9Xb6kM1l8Yk/maxresdefault.jpg"}
     ],
     "ง่วง,เบื่อ": [
-        {"title": "Sunflower - Post Malone",
-         "youtube": "https://www.youtube.com/watch?v=ApXoWvfEYVU",
-         "cover": "https://i.ytimg.com/vi/ApXoWvfEYVU/maxresdefault.jpg"},
-        {"title": "Stay - The Kid LAROI",
-         "youtube": "https://www.youtube.com/watch?v=kTJczUoc26U",
-         "cover": "https://i.ytimg.com/vi/kTJczUoc26U/maxresdefault.jpg"}
+        {"title": "ลาลาลอย - The TOYS",
+         "youtube": "https://www.youtube.com/watch?v=Vv7Ww0P0z7g",
+         "cover": "https://i.ytimg.com/vi/Vv7Ww0P0z7g/maxresdefault.jpg"},
+        {"title": "Vacation Time - Part Time Musicians",
+         "youtube": "https://www.youtube.com/watch?v=yb5vF6XzRzE",
+         "cover": "https://i.ytimg.com/vi/yb5vF6XzRzE/maxresdefault.jpg"}
     ],
     "อกหัก,เศร้า": [
-        {"title": "Someone Like You - Adele",
-         "youtube": "https://www.youtube.com/watch?v=hLQl3WQQoQ0",
-         "cover": "https://i.ytimg.com/vi/hLQl3WQQoQ0/maxresdefault.jpg"},
-        {"title": "Happier Than Ever - Billie Eilish",
-         "youtube": "https://www.youtube.com/watch?v=5GJWxDKyk3A",
-         "cover": "https://i.ytimg.com/vi/5GJWxDKyk3A/maxresdefault.jpg"}
+        {"title": "ถ้าเราเจอกันอีก - Tilly Birds",
+         "youtube": "https://www.youtube.com/watch?v=7ZkC1zR9C1g",
+         "cover": "https://i.ytimg.com/vi/7ZkC1zR9C1g/maxresdefault.jpg"},
+        {"title": "แพ้คำว่ารัก - Calories Blah Blah",
+         "youtube": "https://www.youtube.com/watch?v=HWhm6uFzK8Y",
+         "cover": "https://i.ytimg.com/vi/HWhm6uFzK8Y/maxresdefault.jpg"}
     ]
 }
 
@@ -98,7 +90,7 @@ if "selected_song" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# -------------------- MOOD SELECT --------------------
+# -------------------- เลือกอารมณ์ --------------------
 
 st.markdown("<div class='mood-box'>💭 เลือกความรู้สึกของคุณ</div>", unsafe_allow_html=True)
 
@@ -107,9 +99,7 @@ mood = st.selectbox(
     ["อินเลิฟ,มีความรัก", "เหนื่อย,ท้อ", "ง่วง,เบื่อ", "อกหัก,เศร้า"]
 )
 
-st.markdown("### 🎬 เลือกเพลง")
-
-# -------------------- CAROUSEL --------------------
+st.markdown("### 🎬 เลือกเพลงที่คุณอยากฟัง")
 
 cols = st.columns(len(songs[mood]))
 
@@ -122,20 +112,20 @@ for i, song in enumerate(songs[mood]):
         st.image(song["cover"])
         st.markdown(f"**{song['title']}**")
 
-# -------------------- PLAYER --------------------
+# -------------------- เล่นเพลง --------------------
 
 if st.session_state.selected_song:
     st.markdown("## 🎵 Now Playing")
     st.video(st.session_state.selected_song["youtube"])
 
-# -------------------- SIMPLE AI ANALYZE --------------------
+# -------------------- AI วิเคราะห์แบบง่าย --------------------
 
 st.markdown("## 🤖 วิเคราะห์อารมณ์จากข้อความ")
 
 def analyze_mood(text):
     text = text.lower()
 
-    if any(word in text for word in ["รัก", "love", "คิดถึง"]):
+    if any(word in text for word in ["รัก", "คิดถึง", "ชอบ"]):
         return "อินเลิฟ,มีความรัก"
     elif any(word in text for word in ["เหนื่อย", "ท้อ", "หมดแรง"]):
         return "เหนื่อย,ท้อ"
@@ -152,13 +142,3 @@ if user_text:
     result = analyze_mood(user_text)
     st.success(f"AI วิเคราะห์ว่า: {result}")
     st.session_state.history.append(result)
-
-# -------------------- STATS --------------------
-
-st.markdown("## 📊 สถิติอารมณ์ผู้ใช้")
-
-if st.session_state.history:
-    df = pd.DataFrame(st.session_state.history, columns=["Mood"])
-    st.bar_chart(df["Mood"].value_counts())
-else:
-    st.info("ยังไม่มีข้อมูล")
