@@ -117,4 +117,5 @@ if user_text.strip() != "":
         st.video(song["embed"])
 
         st.write(f"ลำดับที่ {st.session_state.index} / 50 เพลง")
+st.video(embed_link)
 
