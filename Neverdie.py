@@ -1,45 +1,56 @@
 import streamlit as st
 import pandas as pd
-from textblob import TextBlob
 
 st.set_page_config(page_title="Music will never die", layout="wide")
 
-# ------------------ CSS PASTEL ------------------
+# -------------------- PASTEL CSS --------------------
 st.markdown("""
 <style>
 body {
     background-color: #fff6fb;
 }
+
 .title {
-    font-size: 42px;
+    font-size: 48px;
     font-weight: bold;
     text-align: center;
     color: #ff6fa5;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
+
 .carousel {
     display: flex;
     overflow-x: auto;
     gap: 20px;
     padding: 20px 0;
 }
+
 .card {
     min-width: 220px;
     background: #ffe4f0;
-    padding: 10px;
+    padding: 12px;
     border-radius: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
     text-align: center;
 }
+
 .card img {
     border-radius: 15px;
+    width: 100%;
+}
+
+.mood-box {
+    background: #e0f7fa;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
 }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown("<div class='title'>🎵 Music will never die</div>", unsafe_allow_html=True)
 
-# ------------------ SONG DATA ------------------
+# -------------------- SONG DATA --------------------
 
 songs = {
     "อินเลิฟ,มีความรัก": [
@@ -79,66 +90,70 @@ songs = {
     ]
 }
 
-# ------------------ SESSION ------------------
+# -------------------- SESSION --------------------
+
 if "selected_song" not in st.session_state:
     st.session_state.selected_song = None
 
 if "history" not in st.session_state:
     st.session_state.history = []
 
-# ------------------ SELECT MOOD ------------------
+# -------------------- MOOD SELECT --------------------
+
+st.markdown("<div class='mood-box'>💭 เลือกความรู้สึกของคุณ</div>", unsafe_allow_html=True)
 
 mood = st.selectbox(
-    "💭 เลือกความรู้สึกของคุณ",
+    "เลือกอารมณ์",
     ["อินเลิฟ,มีความรัก", "เหนื่อย,ท้อ", "ง่วง,เบื่อ", "อกหัก,เศร้า"]
 )
 
-st.markdown("### 🎬 เลือกเพลงที่คุณชอบ")
+st.markdown("### 🎬 เลือกเพลง")
 
-# ------------------ CAROUSEL ------------------
+# -------------------- CAROUSEL --------------------
 
 cols = st.columns(len(songs[mood]))
 
 for i, song in enumerate(songs[mood]):
     with cols[i]:
-        st.markdown("<div class='card'>", unsafe_allow_html=True)
-        if st.button("▶ เลือก", key=song["title"]):
+        if st.button("▶ เล่น", key=song["title"]):
             st.session_state.selected_song = song
             st.session_state.history.append(mood)
 
         st.image(song["cover"])
         st.markdown(f"**{song['title']}**")
-        st.markdown("</div>", unsafe_allow_html=True)
 
-# ------------------ VIDEO PLAYER ------------------
+# -------------------- PLAYER --------------------
 
 if st.session_state.selected_song:
     st.markdown("## 🎵 Now Playing")
     st.video(st.session_state.selected_song["youtube"])
 
-# ------------------ AI ANALYZE ------------------
+# -------------------- SIMPLE AI ANALYZE --------------------
 
 st.markdown("## 🤖 วิเคราะห์อารมณ์จากข้อความ")
+
+def analyze_mood(text):
+    text = text.lower()
+
+    if any(word in text for word in ["รัก", "love", "คิดถึง"]):
+        return "อินเลิฟ,มีความรัก"
+    elif any(word in text for word in ["เหนื่อย", "ท้อ", "หมดแรง"]):
+        return "เหนื่อย,ท้อ"
+    elif any(word in text for word in ["ง่วง", "เบื่อ", "เซ็ง"]):
+        return "ง่วง,เบื่อ"
+    elif any(word in text for word in ["เศร้า", "อกหัก", "เสียใจ"]):
+        return "อกหัก,เศร้า"
+    else:
+        return "ง่วง,เบื่อ"
 
 user_text = st.text_input("พิมพ์ความรู้สึกของคุณ...")
 
 if user_text:
-    blob = TextBlob(user_text)
-    polarity = blob.sentiment.polarity
-
-    if polarity > 0.3:
-        result = "อินเลิฟ,มีความรัก"
-    elif polarity < -0.3:
-        result = "อกหัก,เศร้า"
-    elif -0.3 <= polarity <= 0.3:
-        result = "ง่วง,เบื่อ"
-    else:
-        result = "เหนื่อย,ท้อ"
-
+    result = analyze_mood(user_text)
     st.success(f"AI วิเคราะห์ว่า: {result}")
     st.session_state.history.append(result)
 
-# ------------------ STATS ------------------
+# -------------------- STATS --------------------
 
 st.markdown("## 📊 สถิติอารมณ์ผู้ใช้")
 
