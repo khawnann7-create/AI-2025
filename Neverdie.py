@@ -7,8 +7,7 @@ import pandas as pd
 # Page Config
 # ===============================
 st.set_page_config(
-    page_title="Never Die 
-    (แนะนำเพลงตามความรู้สึก🐱)",
+    page_title="Never Die (แนะนำเพลงตามความรู้สึก🐱)",
     page_icon="🎵",
     layout="centered"
 )
