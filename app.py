@@ -1,186 +1,99 @@
 import streamlit as st
-import streamlit.components.v1 as components
+import random
 
-html_code = """
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<title>แนะนำเพลงตามความรู้สึก</title>
- 
-  <!-- ===== CSS ===== -->
-<style>
+# =========================
+# ตั้งค่าหน้าเว็บ
+# =========================
+st.set_page_config(
+    page_title="แนะนำเพลงตามความรู้สึก",
+    page_icon="🐱",
+    layout="centered"
+)
+
+# =========================
+# CSS ตกแต่ง
+# =========================
+st.markdown("""
+    <style>
     body {
-      margin: 0;
-      font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #ffd6e8, #e0f7fa);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+        background: linear-gradient(135deg, #ffd6e8, #e0f7fa);
     }
- 
-    .container {
-      background: #ffffffcc;
-      width: 90%;
-      max-width: 420px;
-      border-radius: 25px;
-      padding: 25px;
-      text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    .main-box {
+        background-color: rgba(255,255,255,0.8);
+        padding: 25px;
+        border-radius: 20px;
+        text-align: center;
     }
- 
-    h1 {
-      margin-top: 5px;
-      color: #333;
-    }
- 
-    .cat {
-      font-size: 90px;
-      animation: float 3s ease-in-out infinite;
-    }
- 
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-      100% { transform: translateY(0); }
-    }
- 
-    .subtitle {
-      color: #666;
-      margin-bottom: 20px;
-    }
- 
-    .moods button {
-      margin: 6px;
-      padding: 12px 18px;
-      border-radius: 20px;
-      border: none;
-      cursor: pointer;
-      font-size: 15px;
-      background: #ffe4f1;
-      transition: 0.3s;
-    }
- 
-    .moods button:hover {
-      background: #ff8fab;
-      color: white;
-      transform: scale(1.05);
-    }
- 
-    .songs {
-      margin-top: 25px;
-      background: #fff;
-      border-radius: 15px;
-      padding: 15px;
-      text-align: left;
-    }
- 
-    .songs h3 {
-      text-align: center;
-      margin-top: 0;
-    }
- 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
- 
-    li {
-      margin: 8px 0;
-      font-size: 15px;
-    }
- 
-    footer {
-      margin-top: 15px;
-      font-size: 12px;
-      color: #888;
-    }
-</style>
-</head>
- 
-<body>
- 
-  <div class="container">
-<div class="cat">🐱💿</div>
-<h1>แนะนำเพลงตามความรู้สึก</h1>
-<div class="subtitle">วันนี้คุณรู้สึกยังไงบ้าง?</div>
- 
-    <!-- ปุ่มเลือกอารมณ์ -->
-<div class="moods">
-<button onclick="showSongs('happy')">😊 มีความสุข</button>
-<button onclick="showSongs('sad')">😢 เศร้า</button>
-<button onclick="showSongs('chill')">😌 ชิล ๆ</button>
-<button onclick="showSongs('love')">❤️ ตกหลุมรัก</button>
-</div>
- 
-    <!-- แสดงเพลง -->
-<div class="songs" id="songs">
-<p style="text-align:center;">🎵 เลือกอารมณ์ แล้วแมวจะเปิดเพลงให้</p>
-</div>
- 
-    <footer>
-      แมวเปิดแผ่นเสียงให้คุณ 🐾
-</footer>
-</div>
- 
-  <!-- ===== JavaScript ===== -->
-<script>
-    const musicData = {
-      happy: {
-        title: "เพลงสำหรับวันที่สดใส 🌈",
-        list: [
-          "Lipta – แฟน",
-          "Three Man Down – ข้างกัน",
-          "Polycat – ดูดี",
-          "Scrubb – ทุกอย่าง"
-        ]
-      },
-      sad: {
-        title: "เพลงปลอบใจในวันที่เศร้า 🌧️",
-        list: [
-          "Bodyslam – ความเชื่อ",
-          "Billkin – กีดกัน",
-          "Musketeers – แค่คุณ",
-          "Getsunova – ไกลแค่ไหนคือใกล้"
-        ]
-      },
-      chill: {
-        title: "เพลงฟังสบาย ๆ 🍃",
-        list: [
-          "Safeplanet – ดวงจันทร์กลางวัน",
-          "Phum Viphurit – Long Gone",
-          "Scrubb – เธอหมุนรอบฉัน ฉันหมุนรอบเธอ",
-          "LANDOKMAI – เพลงรักเพลงแรก"
-        ]
-      },
-      love: {
-        title: "เพลงสำหรับคนกำลังรัก 💖",
-        list: [
-          "NONT TANONT – โต๊ะริม",
-          "INK WARUNTORN – เหงา เหงา",
-          "Bowkylion – วิงวอน",
-          "Season Five – นอนจับมือกันครั้งแรก"
-        ]
-      }
-    };
- 
-    function showSongs(mood) {
-      const songsDiv = document.getElementById("songs");
-      const data = musicData[mood];
- 
-      let html = `<h3>${data.title}</h3><ul>`;
-      data.list.forEach(song => {
-        html += `<li>🎶 ${song}</li>`;
-      });
-      html += "</ul>";
- 
-      songsDiv.innerHTML = html;
-    }
-</script>
- 
-</body>
-</html>
-"""
+    </style>
+""", unsafe_allow_html=True)
 
-components.html(html_code, height=200)
+# =========================
+# ฐานข้อมูลเพลง
+# =========================
+music_data = {
+    "😊 มีความสุข": {
+        "title": "เพลงสำหรับวันที่สดใส 🌈",
+        "list": [
+            "Lipta – แฟน",
+            "Three Man Down – ข้างกัน",
+            "Polycat – ดูดี",
+            "Scrubb – ทุกอย่าง"
+        ]
+    },
+    "😢 เศร้า": {
+        "title": "เพลงปลอบใจในวันที่เศร้า 🌧️",
+        "list": [
+            "Bodyslam – ความเชื่อ",
+            "Billkin – กีดกัน",
+            "Musketeers – แค่คุณ",
+            "Getsunova – ไกลแค่ไหนคือใกล้"
+        ]
+    },
+    "😌 ชิล ๆ": {
+        "title": "เพลงฟังสบาย ๆ 🍃",
+        "list": [
+            "Safeplanet – ดวงจันทร์กลางวัน",
+            "Phum Viphurit – Long Gone",
+            "Scrubb – เธอหมุนรอบฉัน ฉันหมุนรอบเธอ",
+            "LANDOKMAI – เพลงรักเพลงแรก"
+        ]
+    },
+    "❤️ ตกหลุมรัก": {
+        "title": "เพลงสำหรับคนกำลังรัก 💖",
+        "list": [
+            "NONT TANONT – โต๊ะริม",
+            "INK WARUNTORN – เหงา เหงา",
+            "Bowkylion – วิงวอน",
+            "Season Five – นอนจับมือกันครั้งแรก"
+        ]
+    }
+}
+
+# =========================
+# ส่วนแสดงผล
+# =========================
+st.markdown("<div class='main-box'>", unsafe_allow_html=True)
+
+st.markdown("## 🐱💿 แนะนำเพลงตามความรู้สึก")
+st.write("วันนี้คุณรู้สึกยังไงบ้าง?")
+
+# เลือกอารมณ์
+mood = st.selectbox(
+    "เลือกอารมณ์ของคุณ",
+    list(music_data.keys())
+)
+
+# ปุ่มแสดงเพลง
+if st.button("🎵 เปิดเพลงให้แมวหน่อย"):
+    data = music_data[mood]
+    st.subheader(data["title"])
+    
+    for song in data["list"]:
+        st.write("🎶", song)
+
+    # ปุ่มสุ่มเพลง
+    if st.button("🔀 สุ่มเพลง 1 เพลง"):
+        random_song = random.choice(data["list"])
+        st.success(f"แมวสุ่มให้แล้ว: {random_song}")
+
+st.markdown("</div>", unsafe_allow_html=True)
