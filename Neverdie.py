@@ -1,3 +1,6 @@
+pip install streamlit textblob pandas
+python -m textblob.download_corpora
+
 import streamlit as st
 import random
 import pandas as pd
