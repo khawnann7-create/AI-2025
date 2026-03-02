@@ -212,15 +212,3 @@ if st.session_state.current_mood:
         """, unsafe_allow_html=True)
 
         st.video(song["embed"])
-
-# =============================
-# สถิติ
-# =============================
-st.markdown("## 📊 สถิติอารมณ์ผู้ใช้")
-
-df = pd.DataFrame(
-    st.session_state.stats.items(),
-    columns=["Mood","Count"]
-)
-
-st.bar_chart(df.set_index("Mood"))
